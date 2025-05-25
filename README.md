@@ -1,1 +1,26 @@
 # Лабораторные работы по kotlin (Android studio)
+
+Основная ветка: [main](https://github.com/K33pQu13t/kotlic-first-steps/tree/main)
+
+Ветка разработки: [develop](https://github.com/K33pQu13t/kotlic-first-steps/tree/develop)
+
+### Лабораторная работа 1
+
+- Вариант: 8
+- Ветка: [lab1](https://github.com/K33pQu13t/kotlic-first-steps/tree/lab1)
+- Сборка: `kotlinc lab1.kt -include-runtime -d lab1.jar`
+- Запуск: `java -jar lab1.jar`
+
+### Лабораторная работа 2
+
+- Вариант: 8
+- Ветка: [lab2](https://github.com/K33pQu13t/kotlic-first-steps/tree/lab2)
+- Сборка: `kotlinc lab2.kt -include-runtime -d lab2.jar`
+- Запуск: `java -jar lab2.jar`
+
+### Лабораторная работа 3
+
+- Вариант: 8
+- Ветка: [lab3](https://github.com/K33pQu13t/kotlic-first-steps/tree/lab3)
+- Сборка: `kotlinc lab3.kt -include-runtime -d lab3.jar`
+- Запуск: `java -jar lab3.jar`
