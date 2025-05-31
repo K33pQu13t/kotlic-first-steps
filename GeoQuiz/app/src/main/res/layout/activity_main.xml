@@ -31,12 +31,14 @@
         >
             <Button
                 style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/true_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/true_button"
             />
             <Button
                 style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/false_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/false_button"
