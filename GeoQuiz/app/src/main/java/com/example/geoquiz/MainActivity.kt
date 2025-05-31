@@ -4,6 +4,7 @@ import Question
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +12,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var questionTextView: TextView
+
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+    private lateinit var nextButton: Button
 
     private var questionBank: List<Question>? = null
+    private var questionIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +27,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initQuestionBank()
+
+        configureQuestionText()
         configureButtons()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -34,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private fun configureButtons() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
+        nextButton = findViewById(R.id.next_button)
 
         trueButton.setOnClickListener { view: View ->
             Toast
@@ -45,6 +53,13 @@ class MainActivity : AppCompatActivity() {
                 .makeText(this, R.string.incorrect_toast, Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    private fun configureQuestionText() {
+        questionTextView = findViewById(R.id.question_text_view)
+
+        val questionTextResId = questionBank!![questionIndex].textResId
+        questionTextView.setText(questionTextResId)
     }
 
     private fun initQuestionBank() {
