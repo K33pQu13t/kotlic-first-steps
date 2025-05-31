@@ -51,21 +51,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonsContainer">
 
-        <Button
+        <ImageButton
             android:id="@+id/prev_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/prev_button"
-            app:icon="@mipmap/arrow_left"
-            app:iconGravity="textStart" />
-        <Button
+            android:contentDescription="@string/prev_button"
+            android:src="@mipmap/arrow_left"
+            app:background="?attr/selectableItemBackgroundBorderless" />
+        <ImageButton
             android:id="@+id/next_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next_button"
-            app:icon="@mipmap/arrow_right"
-            app:iconGravity="textEnd" />
+            android:contentDescription="@string/next_button"
+            android:src="@mipmap/arrow_right"
+            app:background="?attr/selectableItemBackgroundBorderless" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
