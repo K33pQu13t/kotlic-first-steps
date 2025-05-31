@@ -57,6 +57,10 @@ class MainActivity : AppCompatActivity() {
 
         val questionTextResId = questionBank!![questionIndex].textResId
         questionTextView.setText(questionTextResId)
+
+        questionTextView.setOnClickListener {
+            nextQuestion()
+        }
     }
 
     private fun initQuestionBank() {
