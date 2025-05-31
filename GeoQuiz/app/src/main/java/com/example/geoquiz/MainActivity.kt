@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+
+    private lateinit var prevButton: Button
     private lateinit var nextButton: Button
 
     private var questionBank: List<Question>? = null
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private fun configureButtons() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
+        prevButton = findViewById(R.id.prev_button)
         nextButton = findViewById(R.id.next_button)
 
         trueButton.setOnClickListener {
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         }
         falseButton.setOnClickListener {
             checkAnswer(false)
+        }
+        prevButton.setOnClickListener {
+            prevQuestion()
         }
         nextButton.setOnClickListener {
             nextQuestion()
@@ -74,9 +80,19 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    /** Перейти к предыдущему вопросу */
+    private fun prevQuestion() {
+        questionIndex = (questionIndex - 1) % questionBank!!.size
+        updateQuestion()
+    }
+
     /** Перейти к следующему вопросу */
     private fun nextQuestion() {
         questionIndex = (questionIndex + 1) % questionBank!!.size
+        updateQuestion()
+    }
+
+    private fun updateQuestion() {
         val questionTextResId = questionBank!![questionIndex].textResId
         questionTextView.setText(questionTextResId)
     }
