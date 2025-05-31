@@ -1,7 +1,6 @@
 package com.example.geoquiz
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -42,15 +41,11 @@ class MainActivity : AppCompatActivity() {
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
 
-        trueButton.setOnClickListener { view: View ->
-            Toast
-                .makeText(this, R.string.correct_toast, Toast.LENGTH_SHORT)
-                .show()
+        trueButton.setOnClickListener {
+            checkAnswer(true)
         }
-        falseButton.setOnClickListener { view: View ->
-            Toast
-                .makeText(this, R.string.incorrect_toast, Toast.LENGTH_SHORT)
-                .show()
+        falseButton.setOnClickListener {
+            checkAnswer(false)
         }
         nextButton.setOnClickListener {
             nextQuestion()
@@ -80,5 +75,21 @@ class MainActivity : AppCompatActivity() {
         questionIndex = (questionIndex + 1) % questionBank!!.size
         val questionTextResId = questionBank!![questionIndex].textResId
         questionTextView.setText(questionTextResId)
+    }
+
+    /**
+     * Проверить ответ на вопрос
+     * @param userAnswer ответ на вопрос
+     */
+    private fun checkAnswer(userAnswer: Boolean) {
+        val correctAnswer = questionBank!![questionIndex].answer
+
+        val messageResId = if (userAnswer == correctAnswer) {
+            R.string.correct_toast
+        } else {
+            R.string.incorrect_toast
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 }
