@@ -1,6 +1,5 @@
 package com.example.geoquiz
 
-import Question
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -53,6 +52,9 @@ class MainActivity : AppCompatActivity() {
                 .makeText(this, R.string.incorrect_toast, Toast.LENGTH_SHORT)
                 .show()
         }
+        nextButton.setOnClickListener {
+            nextQuestion()
+        }
     }
 
     private fun configureQuestionText() {
@@ -71,5 +73,12 @@ class MainActivity : AppCompatActivity() {
             Question(R.string.question_americas, true),
             Question(R.string.question_asia, true),
         )
+    }
+
+    /** Перейти к следующему вопросу */
+    private fun nextQuestion() {
+        questionIndex = (questionIndex + 1) % questionBank!!.size
+        val questionTextResId = questionBank!![questionIndex].textResId
+        questionTextView.setText(questionTextResId)
     }
 }
