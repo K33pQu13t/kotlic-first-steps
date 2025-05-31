@@ -1,3 +1,7 @@
+package com.example.geoquiz
+
+import androidx.annotation.StringRes
+
 /**
  * Модель вопроса викторины
  * @property textResId идентификатор вопроса
