@@ -1,5 +1,6 @@
 package com.example.geoquiz
 
+import Question
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -13,11 +14,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
 
+    private var questionBank: List<Question>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        initQuestionBank()
         configureButtons()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -41,5 +45,16 @@ class MainActivity : AppCompatActivity() {
                 .makeText(this, R.string.incorrect_toast, Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    private fun initQuestionBank() {
+        questionBank = listOf(
+            Question(R.string.question_australia, true),
+            Question(R.string.question_oceans, true),
+            Question(R.string.question_mideast, false),
+            Question(R.string.question_africa, false),
+            Question(R.string.question_americas, true),
+            Question(R.string.question_asia, true),
+        )
     }
 }
