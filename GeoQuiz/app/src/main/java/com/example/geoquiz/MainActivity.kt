@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         ViewModelProvider(this)[QuizViewModel::class.java]
     }
 
+    private val answersViewModel: UserAnswersViewModel by lazy {
+        ViewModelProvider(this)[UserAnswersViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -45,10 +49,10 @@ class MainActivity : AppCompatActivity() {
         nextButton = findViewById(R.id.next_button)
 
         trueButton.setOnClickListener {
-            checkAnswer(true)
+            setAnswer(true)
         }
         falseButton.setOnClickListener {
-            checkAnswer(false)
+            setAnswer(false)
         }
         prevButton.setOnClickListener {
             prevQuestion()
@@ -83,7 +87,9 @@ class MainActivity : AppCompatActivity() {
      * Проверить ответ на вопрос
      * @param userAnswer ответ на вопрос
      */
-    private fun checkAnswer(userAnswer: Boolean) {
+    private fun setAnswer(userAnswer: Boolean) {
+        answersViewModel.setAnswer(quizViewModel.questionIndex, userAnswer)
+
         val messageResId = if (userAnswer == quizViewModel.questionAnswer) {
             R.string.correct_toast
         } else {

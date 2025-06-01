@@ -3,7 +3,8 @@ package com.example.geoquiz
 import androidx.lifecycle.ViewModel
 
 class QuizViewModel : ViewModel() {
-    private var questionIndex = 0
+    var questionIndex: Int = 0
+        private set
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
