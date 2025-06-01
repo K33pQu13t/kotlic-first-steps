@@ -24,3 +24,7 @@
 - Ветка: [lab3](https://github.com/K33pQu13t/kotlic-first-steps/tree/lab3)
 - Сборка: `kotlinc lab3.kt -include-runtime -d lab3.jar`
 - Запуск: `java -jar lab3.jar`
+
+### Лабораторная работа 4. GeoQuiz
+
+- Ветка: [geo-quiz](https://github.com/K33pQu13t/kotlic-first-steps/tree/geo-quiz) (начало с коммита `e1b843d07dfd087d96e2193f50a12063d4440a00`)
