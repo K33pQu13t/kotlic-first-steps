@@ -62,6 +62,8 @@ class MainActivity : AppCompatActivity() {
         nextButton.setOnClickListener {
             nextQuestion()
         }
+
+        updateNavButtons()
     }
 
     private fun configureQuestionText() {
@@ -95,13 +97,22 @@ class MainActivity : AppCompatActivity() {
         falseButton.visibility = visibility
     }
 
+    private fun updateNavButtons() {
+        if (answersViewModel.answersCount == quizViewModel.questionsCount) {
+            prevButton.visibility = INVISIBLE
+            nextButton.visibility = INVISIBLE
+        }
+    }
+
     /**
      * Проверить ответ на вопрос
      * @param userAnswer ответ на вопрос
      */
     private fun setAnswer(userAnswer: Boolean) {
         answersViewModel.setAnswer(quizViewModel.questionIndex, userAnswer)
+
         updateAnswersButtons()
+        updateNavButtons()
 
         val messageResId = if (userAnswer == quizViewModel.questionAnswer) {
             R.string.correct_toast

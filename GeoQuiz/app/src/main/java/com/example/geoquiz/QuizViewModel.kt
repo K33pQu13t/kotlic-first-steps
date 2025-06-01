@@ -3,9 +3,6 @@ package com.example.geoquiz
 import androidx.lifecycle.ViewModel
 
 class QuizViewModel : ViewModel() {
-    var questionIndex: Int = 0
-        private set
-
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -15,9 +12,17 @@ class QuizViewModel : ViewModel() {
         Question(R.string.question_asia, true),
     )
 
-    val questionAnswer: Boolean get() = questionBank[questionIndex].answer
+    var questionIndex: Int = 0
+        private set
 
-    val questionText: Int get() = questionBank[questionIndex].textResId
+    val questionsCount: Int
+        get() = questionBank.size
+
+    val questionAnswer: Boolean
+        get() = questionBank[questionIndex].answer
+
+    val questionText: Int
+        get() = questionBank[questionIndex].textResId
 
     fun moveToNextQuestion() {
         questionIndex = (questionIndex + 1) % questionBank.size
