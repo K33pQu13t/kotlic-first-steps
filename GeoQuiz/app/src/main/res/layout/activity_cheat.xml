@@ -24,11 +24,11 @@
             android:padding="24dp"
             android:text="@string/warning_text" />
         <TextView
+            android:id="@+id/answer_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="24dp"
-            android:text="Answer" />
+            android:padding="24dp" />
         <Button
             android:id="@+id/show_answer_button"
             style="?android:attr/buttonBarButtonStyle"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="0dp"
-            android:text="@string/false_button" />
+            android:text="@string/show_answer_button" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.example.geoquiz
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -115,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         questionTextView.setText(quizViewModel.questionText)
 
         updateAnswersButtons()
+        updateCheatButton()
     }
 
     private fun updateAnswersButtons() {
@@ -123,6 +123,15 @@ class MainActivity : AppCompatActivity() {
 
         trueButton.visibility = visibility
         falseButton.visibility = visibility
+    }
+
+    private fun updateCheatButton() {
+        if (answersViewModel.getAnswer(quizViewModel.questionIndex) == null) {
+            cheatButton.visibility = VISIBLE
+            return
+        }
+
+        cheatButton.visibility = INVISIBLE
     }
 
     private fun updateNavButtons() {
@@ -140,6 +149,7 @@ class MainActivity : AppCompatActivity() {
         answersViewModel.setAnswer(quizViewModel.questionIndex, userAnswer)
 
         updateAnswersButtons()
+        updateCheatButton()
         updateNavButtons()
 
         val messageResId = if (userAnswer == quizViewModel.questionAnswer) {
@@ -175,7 +185,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCheatActivity() {
-        val intent = Intent(this, CheatActivity::class.java)
+        val intent = CheatActivity.newIntent(
+            this@MainActivity,
+            quizViewModel.questionAnswer)
         startActivity(intent)
     }
 }
