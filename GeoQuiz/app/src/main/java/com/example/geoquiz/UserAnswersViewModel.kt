@@ -27,4 +27,22 @@ class UserAnswersViewModel : ViewModel() {
             null
         }
     }
+
+    /**
+     * Получить число верных ответов пользователя
+     * @param rightAnswers верные ответы
+     * @return число верных ответов пользователя
+     */
+    fun getUserCorrectAnswersCount(rightAnswers: List<Boolean>): Int {
+        val questionsCountToCheck = minOf(answers.size, rightAnswers.size)
+        var rightAnswersCount = 0
+
+        for (index in 0 until questionsCountToCheck) {
+            if (answers[index] == rightAnswers[index]) {
+                rightAnswersCount++
+            }
+        }
+
+        return rightAnswersCount
+    }
 }

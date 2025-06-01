@@ -29,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         ViewModelProvider(this)[UserAnswersViewModel::class.java]
     }
 
+    /** `true` - пользователь дал ответ на все вопросы, иначе `false` */
+    private val isAllQuestionsAnswered: Boolean
+        get() = answersViewModel.answersCount == quizViewModel.questionsCount
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -98,14 +102,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateNavButtons() {
-        if (answersViewModel.answersCount == quizViewModel.questionsCount) {
+        if (isAllQuestionsAnswered) {
             prevButton.visibility = INVISIBLE
             nextButton.visibility = INVISIBLE
         }
     }
 
     /**
-     * Проверить ответ на вопрос
+     * Дать ответ на вопрос
      * @param userAnswer ответ на вопрос
      */
     private fun setAnswer(userAnswer: Boolean) {
@@ -121,5 +125,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+
+        tryShowResult()
+    }
+
+    /**
+     * Отобразить сообщение с количеством верных ответов,
+     * если пользователь ответил на все вопросы
+     */
+    private fun tryShowResult() {
+        if (!isAllQuestionsAnswered) {
+            return
+        }
+
+        val correctAnswers = quizViewModel.getCorrectAnswers()
+        val userCorrectAnswersCount = answersViewModel.getUserCorrectAnswersCount(correctAnswers)
+
+        val message = getString(
+            R.string.correct_answers,
+            userCorrectAnswersCount,
+            correctAnswers.size)
+        Toast
+            .makeText(this, message, Toast.LENGTH_SHORT)
+            .show()
     }
 }
