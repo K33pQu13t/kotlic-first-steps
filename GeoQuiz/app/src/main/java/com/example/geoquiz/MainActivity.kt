@@ -1,5 +1,6 @@
 package com.example.geoquiz
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+
+    private lateinit var cheatButton: Button
 
     private lateinit var prevButton: Button
     private lateinit var nextButton: Button
@@ -68,6 +71,7 @@ class MainActivity : AppCompatActivity() {
     private fun configureButtons() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
+        cheatButton = findViewById(R.id.cheat_button)
         prevButton = findViewById(R.id.prev_button)
         nextButton = findViewById(R.id.next_button)
 
@@ -76,6 +80,9 @@ class MainActivity : AppCompatActivity() {
         }
         falseButton.setOnClickListener {
             setAnswer(false)
+        }
+        cheatButton.setOnClickListener {
+            startCheatActivity()
         }
         prevButton.setOnClickListener {
             prevQuestion()
@@ -165,5 +172,10 @@ class MainActivity : AppCompatActivity() {
         Toast
             .makeText(this, message, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    private fun startCheatActivity() {
+        val intent = Intent(this, CheatActivity::class.java)
+        startActivity(intent)
     }
 }
