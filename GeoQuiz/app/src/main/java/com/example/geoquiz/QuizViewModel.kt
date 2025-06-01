@@ -28,7 +28,7 @@ class QuizViewModel : ViewModel() {
     }
 
     fun moveToPrevQuestion() {
-        questionIndex = (questionIndex - 1) % questionBank.size
+        questionIndex = (questionIndex - 1 + questionBank.size) % questionBank.size
     }
 
     fun getCorrectAnswers(): List<Boolean> {
