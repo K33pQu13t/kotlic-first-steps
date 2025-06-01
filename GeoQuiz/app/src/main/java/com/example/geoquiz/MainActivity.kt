@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
@@ -18,15 +19,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prevButton: Button
     private lateinit var nextButton: Button
 
-    private var questionBank: List<Question>? = null
-    private var questionIndex = 0
+    private val quizViewModel: QuizViewModel by lazy {
+        ViewModelProvider(this)[QuizViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
-        initQuestionBank()
 
         configureQuestionText()
         configureButtons()
@@ -60,41 +60,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun configureQuestionText() {
         questionTextView = findViewById(R.id.question_text_view)
-
-        val questionTextResId = questionBank!![questionIndex].textResId
-        questionTextView.setText(questionTextResId)
-
-        questionTextView.setOnClickListener {
-            nextQuestion()
-        }
-    }
-
-    private fun initQuestionBank() {
-        questionBank = listOf(
-            Question(R.string.question_australia, true),
-            Question(R.string.question_oceans, true),
-            Question(R.string.question_mideast, false),
-            Question(R.string.question_africa, false),
-            Question(R.string.question_americas, true),
-            Question(R.string.question_asia, true),
-        )
+        updateQuestion()
     }
 
     /** Перейти к предыдущему вопросу */
     private fun prevQuestion() {
-        questionIndex = (questionIndex - 1) % questionBank!!.size
+        quizViewModel.moveToPrevQuestion()
         updateQuestion()
     }
 
     /** Перейти к следующему вопросу */
     private fun nextQuestion() {
-        questionIndex = (questionIndex + 1) % questionBank!!.size
+        quizViewModel.moveToNextQuestion()
         updateQuestion()
     }
 
     private fun updateQuestion() {
-        val questionTextResId = questionBank!![questionIndex].textResId
-        questionTextView.setText(questionTextResId)
+        questionTextView.setText(quizViewModel.questionText)
     }
 
     /**
@@ -102,9 +84,7 @@ class MainActivity : AppCompatActivity() {
      * @param userAnswer ответ на вопрос
      */
     private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank!![questionIndex].answer
-
-        val messageResId = if (userAnswer == correctAnswer) {
+        val messageResId = if (userAnswer == quizViewModel.questionAnswer) {
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
