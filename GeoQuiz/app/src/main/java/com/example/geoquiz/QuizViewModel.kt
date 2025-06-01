@@ -13,7 +13,6 @@ class QuizViewModel : ViewModel() {
     )
 
     var questionIndex: Int = 0
-        private set
 
     val questionsCount: Int
         get() = questionBank.size

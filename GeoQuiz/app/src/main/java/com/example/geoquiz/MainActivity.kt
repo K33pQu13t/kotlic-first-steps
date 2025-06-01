@@ -12,6 +12,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 
+private const val KEY_QUESTION_INDEX = "question_index"
+
 class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
 
@@ -38,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        tryPutSavedData(savedInstanceState)
+
         configureButtons()
         configureQuestionText()
 
@@ -46,6 +50,19 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(KEY_QUESTION_INDEX, quizViewModel.questionIndex)
+    }
+
+    private fun tryPutSavedData(savedInstanceState: Bundle?) {
+        val currentIndex = savedInstanceState
+            ?.getInt(KEY_QUESTION_INDEX, 0)
+            ?: 0
+        quizViewModel.questionIndex = currentIndex
     }
 
     private fun configureButtons() {
