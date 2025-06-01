@@ -1,6 +1,8 @@
 package com.example.geoquiz
 
 import android.os.Bundle
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -32,8 +34,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        configureQuestionText()
         configureButtons()
+        configureQuestionText()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -81,6 +83,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateQuestion() {
         questionTextView.setText(quizViewModel.questionText)
+
+        updateAnswersButtons()
+    }
+
+    private fun updateAnswersButtons() {
+        val hasAnswer = answersViewModel.getAnswer(quizViewModel.questionIndex) != null
+        val visibility = if (hasAnswer) INVISIBLE else VISIBLE
+
+        trueButton.visibility = visibility
+        falseButton.visibility = visibility
     }
 
     /**
@@ -89,6 +101,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setAnswer(userAnswer: Boolean) {
         answersViewModel.setAnswer(quizViewModel.questionIndex, userAnswer)
+        updateAnswersButtons()
 
         val messageResId = if (userAnswer == quizViewModel.questionAnswer) {
             R.string.correct_toast
