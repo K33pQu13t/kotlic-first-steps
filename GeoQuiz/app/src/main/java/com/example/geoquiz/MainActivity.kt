@@ -1,5 +1,7 @@
 package com.example.geoquiz
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -13,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 
 private const val KEY_QUESTION_INDEX = "question_index"
+private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
@@ -58,6 +61,25 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
 
         outState.putInt(KEY_QUESTION_INDEX, quizViewModel.questionIndex)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?)
+    {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        if (requestCode == REQUEST_CODE_CHEAT)
+        {
+            quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false)
+                ?: false
+        }
     }
 
     private fun tryPutSavedData(savedInstanceState: Bundle?) {
@@ -152,22 +174,30 @@ class MainActivity : AppCompatActivity() {
         updateCheatButton()
         updateNavButtons()
 
-        val messageResId = if (userAnswer == quizViewModel.questionAnswer) {
-            R.string.correct_toast
-        } else {
-            R.string.incorrect_toast
+        showAnswerResult(userAnswer)
+        tryShowTotalResult()
+
+        resetIsCheater()
+    }
+
+    private fun showAnswerResult(userAnswer: Boolean) {
+        val messageResId = when {
+            userAnswer == quizViewModel.questionAnswer && quizViewModel.isCheater ->
+                R.string.judgment_toast
+            userAnswer == quizViewModel.questionAnswer ->
+                R.string.correct_toast
+            else ->
+                R.string.incorrect_toast
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-
-        tryShowResult()
     }
 
     /**
      * Отобразить сообщение с количеством верных ответов,
      * если пользователь ответил на все вопросы
      */
-    private fun tryShowResult() {
+    private fun tryShowTotalResult() {
         if (!isAllQuestionsAnswered) {
             return
         }
@@ -184,10 +214,14 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun resetIsCheater() {
+        quizViewModel.isCheater = false
+    }
+
     private fun startCheatActivity() {
         val intent = CheatActivity.newIntent(
             this@MainActivity,
             quizViewModel.questionAnswer)
-        startActivity(intent)
+        startActivityForResult(intent, REQUEST_CODE_CHEAT)
     }
 }

@@ -17,11 +17,14 @@ class QuizViewModel : ViewModel() {
     val questionsCount: Int
         get() = questionBank.size
 
+    /** Ответ на текущий вопрос */
     val questionAnswer: Boolean
         get() = questionBank[questionIndex].answer
 
     val questionText: Int
         get() = questionBank[questionIndex].textResId
+
+    var isCheater: Boolean = false
 
     fun moveToNextQuestion() {
         questionIndex = (questionIndex + 1) % questionBank.size
