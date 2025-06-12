@@ -17,4 +17,5 @@
     <string name="correct_toast">Correct!</string>
     <string name="incorrect_toast">Incorrect!</string>
     <string name="judgment_toast">Cheating is wrong.</string>
+    <string name="api_level">API LEVEL %1$d</string>
 </resources>

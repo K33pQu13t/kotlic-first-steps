@@ -37,6 +37,12 @@
             android:layout_gravity="center"
             android:layout_margin="0dp"
             android:text="@string/show_answer_button" />
+        <TextView
+            android:id="@+id/bundle_version_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="24dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
