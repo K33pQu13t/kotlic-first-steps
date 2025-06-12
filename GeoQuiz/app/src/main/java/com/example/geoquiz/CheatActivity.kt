@@ -4,15 +4,20 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 
 private const val EXTRA_ANSWER = "com.bignerdranch.android.geoquiz.answer"
 const val EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.geoquiz.answer_shown"
+
+private const val KEY_WAS_CHEATED = "was_cheated"
 
 class CheatActivity : AppCompatActivity() {
     companion object {
@@ -28,14 +33,22 @@ class CheatActivity : AppCompatActivity() {
     private lateinit var answerTextView: TextView
     private lateinit var showAnswerButton: Button
 
+    private val cheatViewModel: CheatViewModel by lazy {
+        ViewModelProvider(this)[CheatViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_cheat)
 
+        tryPutSavedData(savedInstanceState)
+
         answer = intent.getBooleanExtra(EXTRA_ANSWER, false)
 
         answerTextView = findViewById(R.id.answer_text_view)
+        updateTextViews()
+
         configureButtons()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -45,21 +58,51 @@ class CheatActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean(KEY_WAS_CHEATED, cheatViewModel.wasCheated)
+    }
+
+    private fun tryPutSavedData(savedInstanceState: Bundle?) {
+        cheatViewModel.wasCheated = savedInstanceState
+            ?.getBoolean(KEY_WAS_CHEATED, false)
+            ?: false
+
+        setIsAnswerShown(cheatViewModel.wasCheated)
+    }
+
     private fun configureButtons() {
         showAnswerButton = findViewById(R.id.show_answer_button)
         showAnswerButton.setOnClickListener {
-            val answerText = when {
-                answer -> R.string.true_button
-                else -> R.string.false_button
-            }
-            answerTextView.setText(answerText)
-            setAnswerShownResult(true)
+            setIsAnswerShown(true)
+            updateTextViews()
         }
     }
 
-    private fun setAnswerShownResult(isAnswerShown: Boolean) {
+    private fun updateTextViews() {
+        if (!cheatViewModel.wasCheated) {
+            return
+        }
+
+        val answerText = getAnswerText()
+        answerTextView.setText(answerText)
+    }
+
+    private fun getAnswerText(): Int {
+        val answerText = when {
+            answer -> R.string.true_button
+            else -> R.string.false_button
+        }
+
+        return answerText
+    }
+
+    private fun setIsAnswerShown(isAnswerShown: Boolean) {
+        cheatViewModel.wasCheated = isAnswerShown
+
         val data = Intent().apply {
-            putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown)
+            putExtra(EXTRA_ANSWER_SHOWN, cheatViewModel.wasCheated)
         }
 
         setResult(Activity.RESULT_OK, data)
