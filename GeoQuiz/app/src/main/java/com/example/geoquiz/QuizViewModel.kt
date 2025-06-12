@@ -2,6 +2,8 @@ package com.example.geoquiz
 
 import androidx.lifecycle.ViewModel
 
+private const val cheatingMaxCount = 3
+
 class QuizViewModel : ViewModel() {
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
@@ -11,6 +13,8 @@ class QuizViewModel : ViewModel() {
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true),
     )
+
+    var cheatedQuestionIndexes = mutableListOf<Int>()
 
     var questionIndex: Int = 0
 
@@ -24,7 +28,11 @@ class QuizViewModel : ViewModel() {
     val questionText: Int
         get() = questionBank[questionIndex].textResId
 
-    var isCheater: Boolean = false
+    val canCheat: Boolean
+        get() = cheatedQuestionIndexes.size < cheatingMaxCount
+
+    val isCheater: Boolean
+        get() = cheatedQuestionIndexes.contains(questionIndex)
 
     fun moveToNextQuestion() {
         questionIndex = (questionIndex + 1) % questionBank.size
@@ -36,5 +44,11 @@ class QuizViewModel : ViewModel() {
 
     fun getCorrectAnswers(): List<Boolean> {
         return questionBank.map { it.answer }
+    }
+
+    fun setWasCheated() {
+        if (!cheatedQuestionIndexes.contains(questionIndex)) {
+            cheatedQuestionIndexes.add(questionIndex)
+        }
     }
 }
