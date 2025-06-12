@@ -1,5 +1,7 @@
 package com.example.geoquiz
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -12,11 +14,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 
+private const val KEY_QUESTION_INDEX = "question_index"
+private const val KEY_CHEATED_QUESTION_INDEXES = "cheated_question_indexes"
+private const val REQUEST_CODE_CHEAT = 0
+
 class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+
+    private lateinit var cheatButton: Button
 
     private lateinit var prevButton: Button
     private lateinit var nextButton: Button
@@ -38,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        tryPutSavedData(savedInstanceState)
+
         configureButtons()
         configureQuestionText()
 
@@ -48,9 +58,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(KEY_QUESTION_INDEX, quizViewModel.questionIndex)
+        outState.putIntegerArrayList(
+            KEY_CHEATED_QUESTION_INDEXES,
+            ArrayList(quizViewModel.cheatedQuestionIndexes))
+    }
+
+    private fun tryPutSavedData(savedInstanceState: Bundle?) {
+        val currentIndex = savedInstanceState
+            ?.getInt(KEY_QUESTION_INDEX, 0)
+            ?: 0
+        quizViewModel.questionIndex = currentIndex
+
+        val cheatedQuestionIndexes = savedInstanceState
+            ?.getIntegerArrayList(KEY_CHEATED_QUESTION_INDEXES)
+            ?: mutableListOf<Int>()
+        quizViewModel.cheatedQuestionIndexes = cheatedQuestionIndexes
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?)
+    {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        if (requestCode == REQUEST_CODE_CHEAT
+            && data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) == true)
+        {
+            quizViewModel.setWasCheated()
+        }
+    }
+
     private fun configureButtons() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
+        cheatButton = findViewById(R.id.cheat_button)
         prevButton = findViewById(R.id.prev_button)
         nextButton = findViewById(R.id.next_button)
 
@@ -59,6 +110,9 @@ class MainActivity : AppCompatActivity() {
         }
         falseButton.setOnClickListener {
             setAnswer(false)
+        }
+        cheatButton.setOnClickListener {
+            startCheatActivity()
         }
         prevButton.setOnClickListener {
             prevQuestion()
@@ -91,6 +145,7 @@ class MainActivity : AppCompatActivity() {
         questionTextView.setText(quizViewModel.questionText)
 
         updateAnswersButtons()
+        updateCheatButton()
     }
 
     private fun updateAnswersButtons() {
@@ -99,6 +154,17 @@ class MainActivity : AppCompatActivity() {
 
         trueButton.visibility = visibility
         falseButton.visibility = visibility
+    }
+
+    private fun updateCheatButton() {
+        val visibility = if (
+            quizViewModel.canCheat
+            && (answersViewModel.getAnswer(quizViewModel.questionIndex) == null))
+                VISIBLE
+            else
+                INVISIBLE
+
+        cheatButton.visibility = visibility
     }
 
     private fun updateNavButtons() {
@@ -116,24 +182,31 @@ class MainActivity : AppCompatActivity() {
         answersViewModel.setAnswer(quizViewModel.questionIndex, userAnswer)
 
         updateAnswersButtons()
+        updateCheatButton()
         updateNavButtons()
 
-        val messageResId = if (userAnswer == quizViewModel.questionAnswer) {
-            R.string.correct_toast
-        } else {
-            R.string.incorrect_toast
+        showAnswerResult(userAnswer)
+        tryShowTotalResult()
+    }
+
+    private fun showAnswerResult(userAnswer: Boolean) {
+        val messageResId = when {
+            userAnswer == quizViewModel.questionAnswer && quizViewModel.isCheater ->
+                R.string.judgment_toast
+            userAnswer == quizViewModel.questionAnswer ->
+                R.string.correct_toast
+            else ->
+                R.string.incorrect_toast
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-
-        tryShowResult()
     }
 
     /**
      * Отобразить сообщение с количеством верных ответов,
      * если пользователь ответил на все вопросы
      */
-    private fun tryShowResult() {
+    private fun tryShowTotalResult() {
         if (!isAllQuestionsAnswered) {
             return
         }
@@ -148,5 +221,16 @@ class MainActivity : AppCompatActivity() {
         Toast
             .makeText(this, message, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    private fun startCheatActivity() {
+        if (!quizViewModel.canCheat) {
+            return
+        }
+
+        val intent = CheatActivity.newIntent(
+            this@MainActivity,
+            quizViewModel.questionAnswer)
+        startActivityForResult(intent, REQUEST_CODE_CHEAT)
     }
 }

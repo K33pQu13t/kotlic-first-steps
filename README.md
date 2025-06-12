@@ -8,6 +8,8 @@
 
 Периодически были переносы изменений из `develop` в `main`, также через PR. Такие PR особой ценности не представляют, нужны для сохранения истории в `main`
 
+Для сборки первых трёх лабораторных работ, необходим [kotlin compiler (`kotlinc`)](https://github.com/JetBrains/kotlin/releases/tag/v2.1.21)
+
 ### Лабораторная работа 1
 
 - Вариант: 8
@@ -32,7 +34,12 @@
 - Сборка: `kotlinc lab3.kt -include-runtime -d lab3.jar`
 - Запуск: `java -jar lab3.jar`
 
-### Лабораторная работа 4. GeoQuiz
+### Лабораторная работа 4.1. GeoQuiz
 
 - Ветка: [geo-quiz](https://github.com/K33pQu13t/kotlic-first-steps/tree/geo-quiz) (начало с коммита `e1b843d07dfd087d96e2193f50a12063d4440a00`)
 - [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/5)
+
+### Лабораторная работа 4.2. GeoQuiz cheat
+
+- Ветка: [feature/geo-quiz-cheat](https://github.com/K33pQu13t/kotlin-first-steps/tree/feature/geo-quiz-cheat)
+- [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/7)
