@@ -1,8 +1,10 @@
 package com.example.cashdeposit
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         configureRadioGroups()
         configureEditTexts()
+        configureButtons()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -46,9 +49,7 @@ class MainActivity : AppCompatActivity() {
             outState.putInt(KEY_CASH_AMOUNT, depositSettingViewModel.cashAmount!!)
         }
 
-        if (depositSettingViewModel.percent != null) {
-            outState.putInt(KEY_PERCENT, depositSettingViewModel.percent!!)
-        }
+        outState.putInt(KEY_PERCENT, depositSettingViewModel.percent)
     }
 
     private fun tryPutSavedData(savedInstanceState: Bundle?) {
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         depositSettingViewModel.percent = savedInstanceState
             ?.getInt(KEY_PERCENT)
+            ?: 0
     }
 
     private fun configureRadioGroups() {
@@ -87,6 +89,13 @@ class MainActivity : AppCompatActivity() {
         depositAmountInput.setText(depositSettingViewModel.cashAmount?.toString())
     }
 
+    private fun configureButtons() {
+        val okButton = findViewById<Button>(R.id.ok_button)
+        okButton.setOnClickListener {
+            startResultActivity()
+        }
+    }
+
     private fun onRadioGroupCheckedChange(checkedId: Int) {
         when (checkedId) {
             R.id.radio_deposit_3_months -> {
@@ -103,5 +112,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun onCashAmountChanged(cashAmount: Int?) {
         depositSettingViewModel.cashAmount = cashAmount
+    }
+
+    private fun startResultActivity() {
+        if (depositSettingViewModel.cashAmount == null) {
+            val message = getString(R.string.cash_input_is_required)
+            Toast
+                .makeText(this, message, Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        val intent = ResultActivity.newIntent(
+            this@MainActivity,
+            depositSettingViewModel.cashAmount ?: 0,
+            depositSettingViewModel.percent,
+        )
+
+        startActivity(intent)
     }
 }
