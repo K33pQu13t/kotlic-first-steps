@@ -10,6 +10,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 
+private const val KEY_CASH_AMOUNT = "cash_amount"
+private const val KEY_PERCENT = "percent"
+
+private const val percentBy3Months = 3
+private const val percentBy6Months = 5
+private const val percentBy12Months = 9
+
 class MainActivity : AppCompatActivity() {
     private val depositSettingViewModel: DepositSettingViewModel by lazy {
         ViewModelProvider(this)[DepositSettingViewModel::class.java]
@@ -19,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        tryPutSavedData(savedInstanceState)
 
         configureRadioGroups()
         configureEditTexts()
@@ -30,13 +39,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        if (depositSettingViewModel.cashAmount != null) {
+            outState.putInt(KEY_CASH_AMOUNT, depositSettingViewModel.cashAmount!!)
+        }
+
+        if (depositSettingViewModel.percent != null) {
+            outState.putInt(KEY_PERCENT, depositSettingViewModel.percent!!)
+        }
+    }
+
+    private fun tryPutSavedData(savedInstanceState: Bundle?) {
+        depositSettingViewModel.cashAmount = savedInstanceState
+            ?.getInt(KEY_CASH_AMOUNT)
+
+        depositSettingViewModel.percent = savedInstanceState
+            ?.getInt(KEY_PERCENT)
+    }
+
     private fun configureRadioGroups() {
         val radioGroup = findViewById<RadioGroup>(R.id.radio_group)
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             onRadioGroupCheckedChange(checkedId)
         }
 
-        onRadioGroupCheckedChange(radioGroup.checkedRadioButtonId)
+        val checkedOptionId = when (depositSettingViewModel.percent) {
+            percentBy3Months
+                -> R.id.radio_deposit_3_months
+            percentBy6Months
+                -> R.id.radio_deposit_6_months
+            percentBy12Months
+                -> R.id.radio_deposit_12_months
+            else
+                -> R.id.radio_deposit_3_months
+        }
+        radioGroup.check(checkedOptionId)
     }
 
     private fun configureEditTexts() {
@@ -44,18 +83,20 @@ class MainActivity : AppCompatActivity() {
         depositAmountInput.doAfterTextChanged { text ->
             onCashAmountChanged(text.toString().toIntOrNull())
         }
+
+        depositAmountInput.setText(depositSettingViewModel.cashAmount?.toString())
     }
 
     private fun onRadioGroupCheckedChange(checkedId: Int) {
         when (checkedId) {
             R.id.radio_deposit_3_months -> {
-                depositSettingViewModel.percent = 3
+                depositSettingViewModel.percent = percentBy3Months
             }
             R.id.radio_deposit_6_months -> {
-                depositSettingViewModel.percent = 5
+                depositSettingViewModel.percent = percentBy6Months
             }
             R.id.radio_deposit_12_months -> {
-                depositSettingViewModel.percent = 9
+                depositSettingViewModel.percent = percentBy12Months
             }
         }
     }
