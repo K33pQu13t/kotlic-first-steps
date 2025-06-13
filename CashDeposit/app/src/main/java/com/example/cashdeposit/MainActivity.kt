@@ -6,8 +6,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
+    private val depositSettingViewModel: DepositSettingViewModel by lazy {
+        ViewModelProvider(this)[DepositSettingViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,18 +32,20 @@ class MainActivity : AppCompatActivity() {
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             onRadioGroupCheckedChange(checkedId)
         }
+        
+        onRadioGroupCheckedChange(radioGroup.checkedRadioButtonId)
     }
 
     private fun onRadioGroupCheckedChange(checkedId: Int) {
         when (checkedId) {
             R.id.radio_deposit_3_months -> {
-                // Выбрано 3 месяца
+                depositSettingViewModel.percent = 3
             }
             R.id.radio_deposit_6_months -> {
-                // Выбрано 6 месяцев
+                depositSettingViewModel.percent = 5
             }
             R.id.radio_deposit_12_months -> {
-                // Выбран год
+                depositSettingViewModel.percent = 9
             }
         }
     }
