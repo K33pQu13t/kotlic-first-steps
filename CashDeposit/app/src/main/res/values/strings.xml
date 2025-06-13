@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CashDeposit</string>
+    <string name="deposit_amount_label">Сумма вклада:</string>
+    <string name="deposit_amount_input_hint">введите сумму</string>
+    <string name="deposit_3_months">3 месяца (3%)</string>
+    <string name="deposit_6_months">6 месяцев (6%)</string>
+    <string name="deposit_12_months">год (9%)</string>
+    <string name="ok">ОК</string>
 </resources>
