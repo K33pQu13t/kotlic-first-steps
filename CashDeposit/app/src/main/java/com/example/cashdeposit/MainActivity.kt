@@ -1,11 +1,13 @@
 package com.example.cashdeposit
 
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.RadioGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         configureRadioGroups()
+        configureEditTexts()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -32,8 +35,15 @@ class MainActivity : AppCompatActivity() {
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             onRadioGroupCheckedChange(checkedId)
         }
-        
+
         onRadioGroupCheckedChange(radioGroup.checkedRadioButtonId)
+    }
+
+    private fun configureEditTexts() {
+        val depositAmountInput = findViewById<EditText>(R.id.deposit_amount_input)
+        depositAmountInput.doAfterTextChanged { text ->
+            onCashAmountChanged(text.toString().toIntOrNull())
+        }
     }
 
     private fun onRadioGroupCheckedChange(checkedId: Int) {
@@ -48,5 +58,9 @@ class MainActivity : AppCompatActivity() {
                 depositSettingViewModel.percent = 9
             }
         }
+    }
+
+    private fun onCashAmountChanged(cashAmount: Int?) {
+        depositSettingViewModel.cashAmount = cashAmount
     }
 }
