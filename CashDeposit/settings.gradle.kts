@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Cash Deposit"
+rootProject.name = "CashDeposit"
 include(":app")
  
