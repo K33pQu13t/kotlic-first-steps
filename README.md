@@ -43,3 +43,9 @@
 
 - Ветка: [feature/geo-quiz-cheat](https://github.com/K33pQu13t/kotlin-first-steps/tree/feature/geo-quiz-cheat)
 - [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/7)
+
+### Лабораторная работа 5. CashDeposit
+
+- Вариант: 8
+- Ветка: [deposit-cash](https://github.com/K33pQu13t/kotlin-first-steps/tree/deposit-cash)
+- [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/10)
