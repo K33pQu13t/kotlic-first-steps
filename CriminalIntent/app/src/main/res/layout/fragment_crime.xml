@@ -18,7 +18,7 @@ ls"
         android:layout_height="wrap_content"
         android:hint="@string/crime_title_hint"
         android:importantForAutofill="no"
-        android:inputType="text" />
+        android:inputType="textCapSentences" />
     <TextView
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
