@@ -49,3 +49,8 @@
 - Вариант: 8
 - Ветка: [deposit-cash](https://github.com/K33pQu13t/kotlin-first-steps/tree/deposit-cash)
 - [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/10)
+
+### Лабораторная работа 6.1. CriminalIntent
+
+- Ветка: [criminal-intent](https://github.com/K33pQu13t/kotlin-first-steps/tree/criminal-intent)
+- [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/12)
