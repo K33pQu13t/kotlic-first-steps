@@ -2,8 +2,9 @@ package com.example.criminalintent
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import java.util.UUID
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -16,5 +17,9 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+    }
+
+    override fun onCrimeSelected(crimeId: UUID) {
+        // TODO: handler
     }
 }
