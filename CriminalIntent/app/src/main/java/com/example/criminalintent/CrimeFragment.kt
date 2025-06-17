@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import java.util.UUID
 
 private const val ARG_CRIME_ID = "crime_id"
+private const val DIALOG_DATE = "DialogDate"
 
 class CrimeFragment : Fragment() {
     private lateinit var crime: Crime
@@ -65,6 +66,12 @@ class CrimeFragment : Fragment() {
         solvedCheckBox.apply {
             setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
+            }
+        }
+
+        dateButton.setOnClickListener {
+            DatePickerFragment().apply {
+                show(this@CrimeFragment.requireFragmentManager(), DIALOG_DATE)
             }
         }
     }
