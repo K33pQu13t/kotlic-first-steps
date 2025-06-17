@@ -54,3 +54,8 @@
 
 - Ветка: [criminal-intent](https://github.com/K33pQu13t/kotlin-first-steps/tree/criminal-intent)
 - [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/12)
+
+### Лабораторная работа 6.2 CriminalIntent. ORM
+
+- Ветка: [feature/criminal-intent-db](https://github.com/K33pQu13t/kotlin-first-steps/tree/feature/criminal-intent-db)
+- [PR](https://github.com/K33pQu13t/kotlin-first-steps/pull/14)
